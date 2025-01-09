@@ -35,7 +35,13 @@ app.post('/register', async (req, res) => {
     // Store user in the dictionary
     users[username] = { password: hashedPassword };
 
-    res.status(201).json({ message: 'User registered successfully!' });
+    // Generate a JWT token
+    const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '8h' });
+
+    // Send the token as a cookie
+    res.cookie('token', token, { httpOnly: true });
+
+    res.status(201).json({ message: 'User registered and logged in successfully!' });
 });
 
 // Route: Login user
