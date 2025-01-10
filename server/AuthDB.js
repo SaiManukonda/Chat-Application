@@ -1,4 +1,4 @@
-const pool = require('./schema');
+const pool = require('./schema').pool;
 
 /**
  * Create a new user in the database

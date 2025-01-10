@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const pool = require('./schema');
 const authDB = require('./AuthDB');
+require('dotenv').config({ path: '../.env' });
 
 const app = express();
 const PORT = 3000;
