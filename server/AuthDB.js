@@ -52,25 +52,6 @@ const findUserById = async (id) => {
 };
 
 /**
- * Update a user's details
- * @param {number} id - The ID of the user to update
- * @param {string} username - The updated username
- * @param {string} email - The updated email
- * @returns {object|null} - The updated user if successful, otherwise null
- */
-const updateUser = async (id, username, email) => {
-    const query = `
-        UPDATE users
-        SET username = $1, email = $2
-        WHERE id = $3
-        RETURNING id, username, email
-    `;
-    const values = [username, email, id];
-    const result = await pool.query(query, values);
-    return result.rows[0] || null;
-};
-
-/**
  * Delete a user by their ID
  * @param {number} id - The ID of the user to delete
  * @returns {boolean} - True if the user was deleted, otherwise false
@@ -86,6 +67,5 @@ module.exports = {
     findUserByEmail,
     findUserByUserName,
     findUserById,
-    updateUser,
     deleteUser,
 };

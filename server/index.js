@@ -94,6 +94,26 @@ app.post('/logout', (req, res) => {
     res.json({ message: 'Logged out successfully!' });
 });
 
+app.post('/delete', async (req, res) => {
+    const { username } = req.body;
+
+    if (!username) {
+        return res.status(400).json({ message: 'Username is required.' });
+    }
+
+    const user = await authDB.findUserByUserName(username);
+    if (!user) {
+        return res.status(400).json({ message: 'User does not exist.' });
+    }
+
+    const deleted = await authDB.deleteUser(user.id);
+    if (!deleted) {
+        return res.status(500).json({ message: 'Error deleting user.' });
+    }
+
+    res.json({ message: 'User deleted successfully!' });
+});
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
