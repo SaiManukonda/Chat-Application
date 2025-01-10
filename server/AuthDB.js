@@ -30,6 +30,17 @@ const findUserByEmail = async (email) => {
 };
 
 /**
+ * Find a user by their username
+ * @param {string} username - The username of the user to find
+ * @returns {object|null} - The user if found, otherwise null
+ */
+const findUserByUserName = async (username) => {
+    const query = `SELECT * FROM users WHERE username = $1`;
+    const result = await pool.query(query, [username]);
+    return result.rows[0] || null;
+};
+
+/**
  * Find a user by their ID
  * @param {number} id - The ID of the user to find
  * @returns {object|null} - The user if found, otherwise null
@@ -73,6 +84,7 @@ const deleteUser = async (id) => {
 module.exports = {
     createUser,
     findUserByEmail,
+    findUserByUserName,
     findUserById,
     updateUser,
     deleteUser,

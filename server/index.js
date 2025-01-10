@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const pool = require('./schema');
+const authDB = require('./AuthDB');
 
 const app = express();
 const PORT = 3000;
@@ -14,26 +16,25 @@ app.use(cookieParser());
 // Secret for JWT
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Local dictionary to act as a database
-const users = {};
+pool.initDb();
 
 // Route: Register a new user
 app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!username || !password) {
+    if (!username || !password || !email) {
         return res.status(400).json({ message: 'Username and password are required.' });
     }
 
-    if (users[username]) {
+    if (await authDB.findUserByUserName(username) || await authDB.findUserByEmail(email)) {
         return res.status(400).json({ message: 'User already exists.' });
     }
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Store user in the dictionary
-    users[username] = { password: hashedPassword };
+    // Create a new user
+    const user = await authDB.createUser(username,email, hashedPassword);
 
     // Generate a JWT token
     const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '8h' });
@@ -52,7 +53,7 @@ app.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Username and password are required.' });
     }
 
-    const user = users[username];
+    const user = await authDB.findUserByUserName(username);
     if (!user) {
         return res.status(400).json({ message: 'User does not exist.' });
     }
