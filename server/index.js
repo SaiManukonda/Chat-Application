@@ -5,8 +5,10 @@ const pool = require('./schema');
 require('dotenv').config({ path: '../.env' });
 const authRoutes = require('./auth-routes');
 const chatRoutes = require('./chat-routes');
+const expressWs = require('express-ws');
 
 const app = express();
+const wsInstance = expressWs(app);
 const PORT = 3000;
 
 // Middleware
@@ -17,6 +19,7 @@ pool.initDb();
 
 // Routes
 app.use(authRoutes);
+app.use('/protected', chatRoutes(wsInstance));
 
 // Start server
 app.listen(PORT, () => {
