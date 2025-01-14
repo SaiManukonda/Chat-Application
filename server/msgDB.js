@@ -16,9 +16,13 @@ const createMsg = async (user_id, recipient_id, content) => {
 //find all msgs by id and recipient id
 
 const findAllMsgsById = async (user_id, recipient_id) => {
-    const query = `SELECT content FROM messages WHERE user_id = $1 AND recipient_id = $2`;
-    const result = await pool.query(query, [user_id, recipient_id]);
-    return result.rows;
+    query = `SELECT content FROM messages WHERE user_id = $1 AND recipient_id = $2`;
+    const msgsFromId = await pool.query(query, [user_id, recipient_id]);
+    const msgsFromRecipient = await pool.query(query, [recipient_id, user_id]);
+    return {
+        msgsFromId: msgsFromId.rows,
+        msgsFromRecipient: msgsFromRecipient.rows
+    };
 }
 
 const findUserById = async (id) => {

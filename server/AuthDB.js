@@ -40,6 +40,13 @@ const findUserByUserName = async (username) => {
     return result.rows[0] || null;
 };
 
+
+const findAllUsernames = async () => {
+    const query = `SELECT username FROM users`;
+    const result = await pool.query(query);
+    return result.rows || null;
+};
+
 /**
  * Find a user by their ID
  * @param {number} id - The ID of the user to find
@@ -66,6 +73,7 @@ module.exports = {
     createUser,
     findUserByEmail,
     findUserByUserName,
+    findAllUsernames,
     findUserById,
     deleteUser,
 };
