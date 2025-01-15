@@ -8,10 +8,17 @@ const chatRoutes = require('./chat-routes');
 const AuthDB = require('./AuthDB');
 const expressWs = require('express-ws');
 const fuzzy = require('fuzzy');
+const cors = require('cors');
 
 const app = express();
 const wsInstance = expressWs(app);
 const PORT = 3000;
+
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 
 // Middleware
 app.use(bodyParser.json());
