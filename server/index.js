@@ -12,12 +12,13 @@ const cors = require('cors');
 
 const app = express();
 const wsInstance = expressWs(app);
-const PORT = 3000;
+const PORT = 3007;
 
 app.use(cors({
     origin: '*', // Allow all origins
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+    credentials: true,
 }));
 
 // Middleware

@@ -63,7 +63,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Route: Protected route
-router.get('/protected', (req, res) => {
+router.get('/validate', (req, res) => {
     const token = req.cookies.token;
 
     if (!token) {
